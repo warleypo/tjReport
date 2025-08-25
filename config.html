@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configurações</title>
+    <link rel="stylesheet" href="bootstrap.min.css" />
+  </head>
+  <body class="bg-light">
+    <div class="container-fluid p-4">
+      <div class="jumbotron">
+        <h1 class="display-5">Configurações</h1>
+        <p class="lead">Personalize suas preferências de aplicativo.</p>
+        <form>
+          <h4>Publicador</h4>
+          <hr class="my-4" />
+          <div class="form-group">
+            <label for="publicador">Nome:</label>
+            <input
+              type="text"
+              id="publicador"
+              class="form-control"
+              placeholder="Nome do Publicador"
+            />
+          </div>
+
+          <h4>Pioneiro</h4>
+          <hr class="my-4" />
+          <div class="form-group">
+            <label for="horas">Horas:</label>
+            <div class="input-group mb-3">
+              <input
+                type="number"
+                id="horas"
+                class="form-control"
+              placeholder="Horas do Pioneiro"
+            />
+              <div class="input-group-append">
+                <span class="input-group-text">hrs/mês</span>
+              </div>
+          </div>
+          <div class="form-row">
+            <div class="form-check form-check-inline col-12 col-sm-3">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="publicador" onclick="pioneiroHoras(0)">
+              <label class="form-check-label" for="inlineRadio1">Publicador</label>
+            </div>
+            <div class="form-check form-check-inline col-12 col-sm-3">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="auxiliar" onclick="pioneiroHoras(30)">
+              <label class="form-check-label" for="inlineRadio2">Pioneiro Auxiliar</label>
+            </div>
+            <div class="form-check form-check-inline col-12 col-sm-3">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="promoção" onclick="pioneiroHoras(15)">
+              <label class="form-check-label" for="inlineRadio3">Pioneiro Auxiliar (Promoção)</label>
+            </div>
+            <div class="form-check form-check-inline col-12 col-sm-3">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="regular" onclick="pioneiroHoras(50)">
+              <label class="form-check-label" for="inlineRadio4">Pioneiro Regular</label>
+            </div>
+            <div class="form-check form-check-inline col-12 col-sm-3">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="especial" onclick="pioneiroHoras(100)">
+              <label class="form-check-label" for="inlineRadio5">Pioneiro Especial</label>
+            </div>
+          </div>
+          <div class="form-group my-4">
+            <label for="theme">Programação semanal:</label>
+            <div class="form-row">
+              <div class="form-check form-check-inline col-12 col-sm-3">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="0">
+                <label class="form-check-label" for="inlineCheckbox1">Segunda</label>
+              </div>
+              <div class="form-check form-check-inline col-12 col-sm-3">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="1">
+                <label class="form-check-label" for="inlineCheckbox2">Terça</label>
+              </div>
+              <div class="form-check form-check-inline col-12 col-sm-3">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="2">
+                <label class="form-check-label" for="inlineCheckbox3">Quarta</label>
+              </div>
+              <div class="form-check form-check-inline col-12 col-sm-3">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="3">
+                <label class="form-check-label" for="inlineCheckbox4">Quinta</label>
+              </div>
+              <div class="form-check form-check-inline col-12 col-sm-3">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="4">
+                <label class="form-check-label" for="inlineCheckbox5">Sexta</label>
+              </div>
+              <div class="form-check form-check-inline col-12 col-sm-3">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="5">
+                <label class="form-check-label" for="inlineCheckbox6">Sábado</label>
+              </div>
+              <div class="form-check form-check-inline col-12 col-sm-3">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox7" value="6">
+                <label class="form-check-label" for="inlineCheckbox7">Domingo</label>
+              </div>
+            </div>
+          </div>
+
+          <h4>Envio de Relatório</h4>
+          <hr class="my-4" />
+          <div class="form-group">
+            <label for="theme">Whatsapp:</label>
+            <input
+              type="text"
+              id="whatsapp"
+              class="form-control"
+              title="Apenas números são permitidos"
+              placeholder="Número do Whatsapp">
+          </div>
+
+          <div class="form-row justify-content-end px-2">
+            <button
+              type="button"
+              class="btn btn-secondary mr-2"
+              onclick="location.assign('index.html')"
+            >
+              Voltar
+            </button>
+            <button type="button" class="btn btn-primary" onclick="saveConfig()">Salvar Configurações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

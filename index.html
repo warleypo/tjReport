@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Tempo</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="container-fluid p-4">
+      <div class="jumbotron">
+        <h1 class="display-5">Relatório de Atividades</h1>
+        <p class="lead">Visualize e gerencie suas atividades registradas.</p>
+        <div class="row">
+          <div
+            class="btn-toolbar justify-content-between col-12"
+            role="toolbar"
+            aria-label="Toolbar com grupos de botões"
+          >
+            <div
+              class="btn-group mr-2"
+              role="group"
+              aria-label="Primeiro grupo"
+            >
+              <button
+                type="button"
+                class="btn btn-primary"
+                title="Enviar Relatório"
+                onclick="sendReport()"
+              >
+                <i class="bi bi-send-fill"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-success"
+                title="Compartilhar no WhatsApp"
+                onclick="shareWhatsapp('', 'https://wa.me/?text=tjReport')"
+              >
+                <i class="bi bi-whatsapp"></i>
+              </button>
+            </div>
+            <div
+              class="btn-group mr-2"
+              role="group"
+              aria-label="Primeiro grupo"
+            >
+              <button
+                class="btn btn-secondary"
+                onclick="location.assign('config.html')"
+                title="Configurações"
+              >
+                <i class="bi bi-sliders"></i>
+              </button>
+              <button
+                class="btn btn-primary"
+                onclick="location.assign('cadastro.html')"
+                title="Novo Registro"
+              >
+                <i class="bi bi-journal-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr class="my-4" />
+        <h4>Meta</h4>
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <h1 id="meta_horas">15h</h1>
+          </div>
+          <div class="col-12 col-sm-6 text-right">
+            <span
+              >Horas trabalhadas:
+              <strong id="horas_trabalhadas">11h:01</strong></span
+            >
+            <br />
+            <span
+              >Horas restantes:
+              <strong id="horas_restantes">3h:09</strong></span
+            >
+            <br />
+            <span
+              >Dias para atividade: <strong id="dias_atividade">3</strong></span
+            >
+            <br />
+            <span
+              >Objetivo diário:
+              <strong id="objetivo_diario">1h:03</strong></span
+            >
+          </div>
+        </div>
+        <hr class="my-4" />
+
+        <div class="row justify-content-end px-2 pb-4">
+          <strong class="mx-2 p-2">Mês</strong>
+          <button onclick="previousReport()" class="btn btn-secondary">
+            <i class="bi bi-arrow-bar-left"></i>
+          </button>
+          <strong id="mesReport" class="mx-2 p-2"></strong>
+          <button onclick="nextReport()" class="btn btn-secondary">
+            <i class="bi bi-arrow-bar-right"></i>
+          </button>
+        </div>
+        <ul id="lista" class="p-2"></ul>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

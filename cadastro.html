@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="bootstrap.min.css" />
+  </head>
+  <body class="bg-light">
+    <div class="container-fluid p-4">
+      <div class="jumbotron">
+        <h1 class="display-5">Cadastro de Atividades</h1>
+        <p class="lead">
+          Preencha os dados abaixo para cadastrar uma nova atividade.
+        </p>
+        <form>
+          <div class="form-row">
+            <div class="form-group col-12">
+              <label for="data">Data:</label>
+              <input type="date" id="data" class="form-control" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-12">
+              <label for="tempo">Tempo:</label>
+              <div class="input-group mb-3">
+                <input type="time" id="tempo" class="form-control" />
+                <div class="input-group-append">
+                  <button
+                    type="button"
+                    id="btnStart"
+                    class="input-group-text btn btn-primary mb-2"
+                    style="display: inline"
+                    onclick="startTimer(); toggleButton()"
+                  >
+                    Iniciar Tempo
+                  </button>
+                  <button
+                    type="button"
+                    id="btnStop"
+                    class="input-group-text btn btn-danger mb-2"
+                    style="display: none"
+                    onclick="stopTimer(); toggleButton()"
+                  >
+                    Parar Tempo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="form-row">
+            <div class="form-group col-12 col-sm-6">
+              <label for="nome">Estudos bíblicos:</label>
+              <div class="input-group">
+                <input
+                  type="number"
+                  name="estudos"
+                  id="estudos"
+                  class="form-control"
+                />
+                <div class="input-group-append">
+                  <button
+                    type="button"
+                    onclick="addEstudo(1)"
+                    class="px-4 input-group-text btn btn-primary mb-2"
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    onclick="addEstudo(-1)"
+                    class="px-4 input-group-text btn btn-danger mb-2"
+                  >
+                    -
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-12 col-sm-6">
+              <label for="nome">Estudantes:</label>
+              <input
+                type="text"
+                name="estudantes"
+                id="estudantes"
+                placeholder="nomes"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <label for="obs">Observações:</label>
+              <textarea name="obs" id="obs" class="form-control"></textarea>
+            </div>
+          </div>
+          <div class="form-row justify-content-end px-2">
+            <button
+              type="button"
+              class="btn btn-secondary mr-2"
+              onclick="location.assign('index.html')"
+            >
+              Voltar
+            </button>
+            <button
+              type="button"
+              id="btnSalvar"
+              class="btn btn-primary"
+              style="display: inline"
+              onclick="salvar()"
+            >
+              Salvar Registro
+            </button>
+            <button
+              type="button"
+              id="btnAlterar"
+              class="btn btn-primary"
+              style="display: none"
+              onclick="salvar(true)"
+            >
+              Alterar Registro
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
