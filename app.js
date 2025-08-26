@@ -308,19 +308,6 @@ function showReport(ano, mes) {
     const spanObs = document.createElement("span");
     spanObs.innerHTML = `${reg.obs.replace(/\r?\n/g, "<br>")}`;
     spanObs.classList.add("text-info");
-    spanObs.addEventListener("click", () => {
-      if (navigator.canShare && navigator.canShare({ text: reg.obs })) {
-        navigator.share({
-          title: "Anotações",
-          text: reg.obs,
-        });
-      } else {
-        navigator.clipboard.writeText(reg.obs);
-        alert(
-          "Anotação copiada para a área de transferência, pois seu navegador não suporta compartilhamento."
-        );
-      }
-    });
 
     div.appendChild(spanObs);
 
