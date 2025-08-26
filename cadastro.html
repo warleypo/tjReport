@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro</title>
     <link rel="stylesheet" href="bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
   </head>
   <body class="bg-light">
     <div class="container-fluid p-4">
@@ -111,9 +115,7 @@
                     type="button"
                     onclick="addEstudo(-1)"
                     class="px-4 input-group-text btn btn-danger mb-2"
-                  >
-                    -
-                  </button>
+                  ></button>
                 </div>
               </div>
             </div>
@@ -134,7 +136,23 @@
           <div class="form-row">
             <div class="form-group col-12">
               <label for="obs">Observações:</label>
-              <textarea name="obs" id="obs" class="form-control"></textarea>
+              <div class="input-group">
+                <textarea
+                  name="obs"
+                  id="obs"
+                  class="form-control input-group"
+                ></textarea>
+                <div class="input-group-append">
+                  <button
+                    type="button"
+                    class="btn btn-success input-group-text"
+                    title="Compartilhar anotações"
+                    onclick="shareText()"
+                  >
+                    <i class="bi bi-share-fill"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-row justify-content-end px-2">

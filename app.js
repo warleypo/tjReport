@@ -244,7 +244,8 @@ function subtrairHoras(hora1, hora2) {
   const t2 = h2 * 3600 + m2 * 60;
 
   let diff = t1 - t2;
-  if (diff < 0) diff += 24 * 3600; // caso passe da meia-noite
+  if (diff < 0) return "00:00";
+  // if (diff < 0) diff += 24 * 3600; // caso passe da meia-noite
 
   const horas = Math.floor(diff / 3600)
     .toString()
@@ -261,7 +262,7 @@ function calcularObjetivoDiario(horasRestantes, diasAtividade) {
   const [hr, mr] = horasRestantes.split(":").map(Number);
   const totalMinutos = hr * 60 + mr;
   const objetivoMinutos = Math.ceil(totalMinutos / diasAtividade);
-  return `${Math.floor(objetivoMinutos / 60)}:${String(
+  return `${String(Math.floor(objetivoMinutos / 60)).padStart(2, "0")}:${String(
     objetivoMinutos % 60
   ).padStart(2, "0")}`;
 }
@@ -515,7 +516,7 @@ function shareWhatsapp(fone = "", text = "") {
 }
 
 async function backup() {
-  const bkpReport = JSON.stringify({ ...localStorage });
+  const bkpReport = { ...localStorage };
   const blob = new Blob([JSON.stringify(bkpReport)], {
     type: "application/json",
   });
@@ -523,7 +524,51 @@ async function backup() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "config_backup.json";
+  a.download = `tjReport_backup-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+async function restoreBackup() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "application/json";
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target.result);
+        console.log("Restaurando backup...", data);
+        if (data && typeof data === "object") {
+          Object.keys(data).forEach((key) => {
+            localStorage.setItem(key, data[key]);
+          });
+          alert("Backup restaurado com sucesso!");
+          location.reload();
+        } else {
+          throw new Error("Arquivo inválido");
+        }
+      } catch (error) {
+        alert("Erro ao restaurar backup: " + error.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function shareText() {
+  const obsText = document.getElementById("obs").value;
+  if (navigator.canShare && navigator.canShare({ text: obsText })) {
+    navigator.share({
+      title: "Anotações",
+      text: obsText,
+    });
+  } else {
+    navigator.clipboard.writeText(obsText);
+    alert(
+      "Anotação copiada para a área de transferência, pois seu navegador não suporta compartilhamento."
+    );
+  }
 }
