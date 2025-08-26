@@ -510,15 +510,24 @@ function backup() {
   if (navigator.share) {
     document.querySelector("p.lead").textContent =
       "Compartilhando seu backup...";
-    navigator.share({
-      title: "Backup de tjReport",
-      text: "Baixe seu backup de relatórios e configurações do app.",
-      files: [
-        new File([blob], "tjReport_backup.json", { type: "application/json" }),
-      ],
-    });
-    document.querySelector("p.lead").textContent =
-      "Personalize suas preferências de aplicativo.";
+    navigator
+      .share({
+        title: "Backup de tjReport",
+        text: "Baixe seu backup de relatórios e configurações do app.",
+        files: [
+          new File([blob], "tjReport_backup.json", {
+            type: "application/json",
+          }),
+        ],
+      })
+      .then(() => {
+        document.querySelector("p.lead").textContent =
+          "Personalize suas preferências de aplicativo.";
+      })
+      .catch((error) => {
+        document.querySelector("p.lead").textContent =
+          "Erro ao compartilhar:" + String(error);
+      });
   } else {
     alert(
       "Seu navegador não suporta a API de compartilhamento. Vou iniciar o download."
