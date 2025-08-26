@@ -1,4 +1,4 @@
-const CACHE_NAME = "tj-report-cache";
+const CACHE_NAME = "tj-report-cache-v1";
 
 const urlsToCache = ["/", "/index.html", "/app.js"];
 
