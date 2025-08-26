@@ -507,7 +507,7 @@ async function backup() {
     type: "application/json",
   });
 
-  if (navigator.share) {
+  if (navigator.canShare && navigator.canShare({ files: [blob] })) {
     document.querySelector("p.lead").textContent =
       "Compartilhando seu backup...";
     try {
