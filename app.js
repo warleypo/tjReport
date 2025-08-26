@@ -501,7 +501,7 @@ function shareWhatsapp(fone = "", text = "") {
   window.open(url, "_blank");
 }
 
-function backup() {
+async function backup() {
   const bkpReport = JSON.stringify({ ...localStorage });
   const blob = new Blob([JSON.stringify(bkpReport)], {
     type: "application/json",
@@ -510,8 +510,8 @@ function backup() {
   if (navigator.share) {
     document.querySelector("p.lead").textContent =
       "Compartilhando seu backup...";
-    navigator
-      .share({
+    try {
+      navigator.share({
         title: "Backup de tjReport",
         text: "Baixe seu backup de relatórios e configurações do app.",
         files: [
@@ -519,15 +519,11 @@ function backup() {
             type: "application/json",
           }),
         ],
-      })
-      .then(() => {
-        document.querySelector("p.lead").textContent =
-          "Personalize suas preferências de aplicativo.";
-      })
-      .catch((error) => {
-        document.querySelector("p.lead").textContent =
-          "Erro ao compartilhar:" + String(error);
       });
+    } catch (error) {
+      document.querySelector("p.lead").textContent =
+        "Erro ao compartilhar:" + String(error);
+    }
   } else {
     alert(
       "Seu navegador não suporta a API de compartilhamento. Vou iniciar o download."
