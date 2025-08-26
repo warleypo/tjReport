@@ -508,13 +508,17 @@ function backup() {
   });
 
   if (navigator.share) {
+    document.querySelector("p.lead").textContent =
+      "Compartilhando seu backup...";
     navigator.share({
-      title: "Backup de Configuração",
-      text: "Baixe seu backup de configuração",
+      title: "Backup de tjReport",
+      text: "Baixe seu backup de relatórios e configurações do app.",
       files: [
-        new File([blob], "config_backup.json", { type: "application/json" }),
+        new File([blob], "tjReport_backup.json", { type: "application/json" }),
       ],
     });
+    document.querySelector("p.lead").textContent =
+      "Personalize suas preferências de aplicativo.";
   } else {
     alert(
       "Seu navegador não suporta a API de compartilhamento. Vou iniciar o download."
