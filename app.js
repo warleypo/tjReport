@@ -307,6 +307,19 @@ function showReport(ano, mes) {
     const spanObs = document.createElement("span");
     spanObs.innerHTML = `${reg.obs.replace(/\r?\n/g, "<br>")}`;
     spanObs.classList.add("text-info");
+    spanObs.addEventListener("click", () => {
+      if (navigator.canShare && navigator.canShare({ text: reg.obs })) {
+        navigator.share({
+          title: "Anotações",
+          text: reg.obs,
+        });
+      } else {
+        navigator.clipboard.writeText(reg.obs);
+        alert(
+          "Anotação copiada para a área de transferência, pois seu navegador não suporta compartilhamento."
+        );
+      }
+    });
 
     div.appendChild(spanObs);
 
@@ -507,32 +520,10 @@ async function backup() {
     type: "application/json",
   });
 
-  if (navigator.canShare && navigator.canShare({ files: [blob] })) {
-    document.querySelector("p.lead").textContent =
-      "Compartilhando seu backup...";
-    try {
-      navigator.share({
-        title: "Backup de tjReport",
-        text: "Baixe seu backup de relatórios e configurações do app.",
-        files: [
-          new File([blob], "tjReport_backup.json", {
-            type: "application/json",
-          }),
-        ],
-      });
-    } catch (error) {
-      document.querySelector("p.lead").textContent =
-        "Erro ao compartilhar:" + String(error);
-    }
-  } else {
-    alert(
-      "Seu navegador não suporta a API de compartilhamento. Vou iniciar o download."
-    );
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "config_backup.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "config_backup.json";
+  a.click();
+  URL.revokeObjectURL(url);
 }
