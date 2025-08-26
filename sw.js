@@ -1,6 +1,12 @@
 const CACHE_NAME = "tj-report-cache-v2";
 
-const urlsToCache = ["/", "/index.html", "/app.js"];
+const urlsToCache = [
+  "/",
+  "/index.html",
+  "/app.js",
+  "cadastro.html",
+  "config.html",
+];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
