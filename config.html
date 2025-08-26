@@ -5,12 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Configurações</title>
     <link rel="stylesheet" href="bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
   </head>
   <body class="bg-light">
     <div class="container-fluid p-4">
       <div class="jumbotron">
         <h1 class="display-5">Configurações</h1>
         <p class="lead">Personalize suas preferências de aplicativo.</p>
+        <div class="row mb-3">
+          <div
+            class="btn-toolbar justify-content-end col-12"
+            role="toolbar"
+            aria-label="Toolbar com grupos de botões"
+          >
+            <div
+              class="btn-group mr-2"
+              role="group"
+              aria-label="Primeiro grupo"
+            >
+              <button
+                type="button"
+                class="btn btn-secondary"
+                title="Salvar cópia dos dados"
+                onclick="backup()"
+              >
+                <i class="bi bi-cloud-upload"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                title="Restaurar cópia dos dados"
+                onclick="restoreBackup()"
+              >
+                <i class="bi bi-cloud-download"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- <hr class="my-4" /> -->
         <form>
           <h4>Publicador</h4>
           <hr class="my-4" />

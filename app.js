@@ -113,7 +113,6 @@ function saveConfig() {
   config.envio.whatsapp = document.getElementById("whatsapp").value || "";
 
   localStorage.setItem(key, JSON.stringify(config));
-  console.log("Configurações salvas:", config);
   location.assign("index.html");
 }
 
@@ -121,7 +120,6 @@ function saveReport(report) {
   const ano = report.data.split("-")[0];
   const mes = report.data.split("-")[1];
   const key = getStorageKey(ano, mes);
-  console.log(key, ano, mes);
 
   //recupera registros
   const registros = getReportData(ano, mes);
@@ -136,12 +134,22 @@ function sendReport() {
   const totais = getTotais();
   const mensagem =
     `Prezado irmão, envio-lhe o meu relatório:\n\n` +
-    `*Nome: ${config.publicador.nome}*\r\n` +
+    `*Nome: ${config.publicador.nome || "Eu"}*\r\n` +
     `*Mês: ${meses[mesAtual - 1]}/${anoAtual}*\r\n` +
-    `Participou no ministério: ${
-      totais.horas_trabalhadas === "00:00" ? "Não" : "Sim"
-    }\r\n` +
+    (config.pioneiro.tipo === "publicador"
+      ? `Participou no ministério: ${
+          totais.horas_trabalhadas === "00:00" ? "Não" : "Sim"
+        }\r\n`
+      : `Horas: ${totais.horas_trabalhadas}\r\n`) +
     `Estudos: ${totais.estudos}\r\n\r\n` +
+    (["regular", "especial"].includes(config.pioneiro.tipo) &&
+    totais.horas_aprovadas !== "00:00"
+      ? `_Atividades Aprovadas: ${totais.horas_aprovadas}_\r\n`
+      : "") +
+    (["regular", "especial"].includes(config.pioneiro.tipo) &&
+    totais.horas_escolas !== "00:00"
+      ? `_Escolas Teocráticas: ${totais.horas_escolas}_\r\n`
+      : "") +
     "Atenciosamente.";
   shareWhatsapp(config.envio.whatsapp.replace(/[^\d]/g, ""), mensagem);
 }
@@ -149,6 +157,8 @@ function sendReport() {
 function getTotais() {
   const registros = getReportData(anoAtual, mesAtual);
   const totais = {
+    horas_aprovadas: "00:00",
+    horas_escolas: "00:00",
     horas_trabalhadas: "00:00",
     horas_restantes: "00:00",
     dias_atividade: 0,
@@ -157,15 +167,21 @@ function getTotais() {
   };
 
   registros.forEach((reg) => {
-    totais.horas_trabalhadas = somarHoras(totais.horas_trabalhadas, reg.tempo);
+    if (reg.tipo === "aprovadas") {
+      totais.horas_aprovadas = somarHoras(totais.horas_aprovadas, reg.tempo);
+    } else if (reg.tipo === "escolas") {
+      totais.horas_escolas = somarHoras(totais.horas_escolas, reg.tempo);
+    } else {
+      totais.horas_trabalhadas = somarHoras(
+        totais.horas_trabalhadas,
+        reg.tempo
+      );
+    }
     totais.estudos += parseInt(reg.estudos) || 0;
   });
 
   config.programacao.dias.forEach((dia) => {
     totais.dias_atividade += diasRestantes(parseInt(dia));
-    console.log(
-      `Dias restantes para o dia ${dia}: ${diasRestantes(parseInt(dia))}`
-    );
   });
 
   totais.horas_restantes = subtrairHoras(
@@ -177,6 +193,23 @@ function getTotais() {
     totais.dias_atividade
   );
 
+  if (
+    !["regular", "especial"].includes(config.pioneiro.tipo) ||
+    totais.horas_aprovadas === "00:00"
+  ) {
+    document.getElementById("horas_aprovadas").parentElement.style.display =
+      "none";
+  }
+  if (
+    !["regular", "especial"].includes(config.pioneiro.tipo) ||
+    totais.horas_escolas === "00:00"
+  ) {
+    document.getElementById("horas_escolas").parentElement.style.display =
+      "none";
+  }
+
+  setText("horas_aprovadas", totais.horas_aprovadas);
+  setText("horas_escolas", totais.horas_escolas);
   setText("horas_trabalhadas", totais.horas_trabalhadas);
   setText("horas_restantes", totais.horas_restantes);
   setText("dias_atividade", totais.dias_atividade);
@@ -224,7 +257,6 @@ function subtrairHoras(hora1, hora2) {
 }
 
 function calcularObjetivoDiario(horasRestantes, diasAtividade) {
-  console.log("objetivo", horasRestantes, diasAtividade);
   if (diasAtividade === 0) return horasRestantes;
   const [hr, mr] = horasRestantes.split(":").map(Number);
   const totalMinutos = hr * 60 + mr;
@@ -239,7 +271,6 @@ function showReport(ano, mes) {
   mesReport &&
     (mesReport.textContent = `${String(mes).padStart(2, "0")}/${ano}`);
   const registros = getReportData(ano, mes);
-  console.log(registros);
 
   const lista = document.getElementById("lista");
   lista && (lista.innerHTML = "");
@@ -350,6 +381,15 @@ function getEditData() {
       document.getElementById("tempo").value = registro.tempo;
       document.getElementById("estudos").value = registro.estudos;
       document.getElementById("estudantes").value = registro.estudantes;
+      document.getElementById(
+        `horaTipo${
+          registro.tipo === "escolas"
+            ? 3
+            : registro.tipo === "aprovadas"
+            ? 2
+            : 1
+        }`
+      ).checked = true;
       document.getElementById("obs").value = registro.obs;
     }
   }
@@ -365,6 +405,9 @@ function saveEditData() {
       registro[id].tempo = document.getElementById("tempo").value;
       registro[id].estudos = document.getElementById("estudos").value;
       registro[id].estudantes = document.getElementById("estudantes").value;
+      registro[id].tipo =
+        document.querySelector("input[name='horaTipo']:checked")?.value ||
+        "pregação";
       registro[id].obs = document.getElementById("obs").value;
       localStorage.setItem(
         `report-${mes[0]}-${mes[1]}`,
@@ -421,11 +464,17 @@ function salvar(update = false) {
     saveEditData();
     return;
   }
+  //config.pioneiro.tipo =
+  //  document.querySelector("input[name='inlineRadioOptions']:checked")?.value ||
+  //  "";
   const report = {
     data: getInputData("data"),
     tempo: getInputData("tempo"),
     estudos: getInputData("estudos"),
     estudantes: getInputData("estudantes"),
+    tipo:
+      document.querySelector("input[name='horaTipo']:checked")?.value ||
+      "pregação",
     obs: getInputData("obs"),
   };
   if (!isNaN(new Date(report.data).getTime())) {
@@ -450,4 +499,31 @@ function pioneiroHoras(horas) {
 function shareWhatsapp(fone = "", text = "") {
   const url = `https://wa.me/${fone}?text=${encodeURIComponent(text)}`;
   window.open(url, "_blank");
+}
+
+function backup() {
+  const bkpReport = JSON.stringify({ ...localStorage });
+  const blob = new Blob([JSON.stringify(bkpReport)], {
+    type: "application/json",
+  });
+
+  if (navigator.share) {
+    navigator.share({
+      title: "Backup de Configuração",
+      text: "Baixe seu backup de configuração",
+      files: [
+        new File([blob], "config_backup.json", { type: "application/json" }),
+      ],
+    });
+  } else {
+    alert(
+      "Seu navegador não suporta a API de compartilhamento. Vou iniciar o download."
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "config_backup.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 }
