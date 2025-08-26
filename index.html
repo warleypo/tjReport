@@ -4,7 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registro de Tempo</title>
-    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/png" href="/tjReport.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Seu App" />
+
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/apple-touch-icon-180.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="/apple-touch-icon-120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="/apple-touch-icon-76.png"
+    />
+
     <link rel="stylesheet" href="bootstrap.min.css" />
     <link
       rel="stylesheet"
@@ -118,6 +144,24 @@
         <ul id="lista" class="p-2"></ul>
       </div>
     </div>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((reg) => {
+              console.log(
+                "Service Worker registrado com sucesso no escopo:",
+                reg.scope
+              );
+            })
+            .catch((err) => {
+              console.log("Falha no registro do Service Worker:", err);
+            });
+        });
+      }
+    </script>
 
     <script src="app.js"></script>
   </body>
