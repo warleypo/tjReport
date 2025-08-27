@@ -330,6 +330,7 @@ function nextReport() {
     anoAtual++;
   }
   showReport(anoAtual, mesAtual);
+  getTotais();
 }
 
 function previousReport() {
@@ -339,6 +340,7 @@ function previousReport() {
     anoAtual--;
   }
   showReport(anoAtual, mesAtual);
+  getTotais();
 }
 
 showReport(anoAtual, mesAtual);
@@ -557,5 +559,28 @@ function shareText() {
     alert(
       "Anotação copiada para a área de transferência, pois seu navegador não suporta compartilhamento."
     );
+  }
+}
+
+function removeReport() {
+  const confirmDelete = confirm(
+    "Tem certeza que deseja remover este registro?"
+  );
+  if (confirmDelete) {
+    const id = new URLSearchParams(window.location.search).get("id");
+    const mes = new URLSearchParams(window.location.search)
+      .get("mes")
+      .split("-");
+    if (id && mes) {
+      const registros = getReportData(mes[0], mes[1]);
+      if (registros && registros[id]) {
+        registros.splice(id, 1);
+        localStorage.setItem(
+          `report-${mes[0]}-${mes[1]}`,
+          JSON.stringify(registros)
+        );
+        location.assign("index.html");
+      }
+    }
   }
 }

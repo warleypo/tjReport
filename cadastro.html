@@ -155,32 +155,42 @@
               </div>
             </div>
           </div>
-          <div class="form-row justify-content-end px-2">
+          <div class="form-row justify-content-between px-1">
             <button
               type="button"
-              class="btn btn-secondary mr-2"
-              onclick="location.assign('index.html')"
+              class="btn btn-danger mr-2"
+              title="Remover registro"
+              onclick="removeReport()"
             >
-              Voltar
+              <i class="bi bi-trash3-fill"></i>
             </button>
-            <button
-              type="button"
-              id="btnSalvar"
-              class="btn btn-primary"
-              style="display: inline"
-              onclick="salvar()"
-            >
-              Salvar Registro
-            </button>
-            <button
-              type="button"
-              id="btnAlterar"
-              class="btn btn-primary"
-              style="display: none"
-              onclick="salvar(true)"
-            >
-              Alterar Registro
-            </button>
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-secondary mr-2"
+                onclick="location.assign('index.html')"
+              >
+                Voltar
+              </button>
+              <button
+                type="button"
+                id="btnSalvar"
+                class="btn btn-primary"
+                style="display: inline"
+                onclick="salvar()"
+              >
+                Salvar Registro
+              </button>
+              <button
+                type="button"
+                id="btnAlterar"
+                class="btn btn-primary"
+                style="display: none"
+                onclick="salvar(true)"
+              >
+                Alterar Registro
+              </button>
+            </div>
           </div>
         </form>
       </div>

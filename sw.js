@@ -1,4 +1,4 @@
-const CACHE_NAME = "tj-report-cache-v2";
+const CACHE_NAME = "tj-report-cache-v3";
 
 const urlsToCache = [
   "/",
@@ -32,6 +32,12 @@ self.addEventListener("fetch", (e) => {
     } else {
       return fetch(e.request)
         .then((networkResponse) => {
+          if (networkResponse.status === 404) {
+            return new Response("Recurso não encontrado.", {
+              status: 404,
+              statusText: "Not Found",
+            });
+          }
           if (networkResponse.ok) {
             const cacheClone = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
