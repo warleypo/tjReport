@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registro de Tempo</title>
-    <link rel="icon" type="image/png" href="/tjReport/tjReport.png" />
-    <link rel="manifest" href="/tjReport/manifest.json" />
+    <link rel="icon" type="image/png" href="./tjReport.png" />
+    <link rel="manifest" href="./manifest.json" />
 
     <meta name="mobile-web-app-capable" content="yes" />
     <meta
@@ -149,7 +149,7 @@
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker
-            .register("/tjReport/sw.js")
+            .register("./sw.js")
             .then((reg) => {
               console.log(
                 "Service Worker registrado com sucesso no escopo:",

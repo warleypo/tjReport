@@ -1,13 +1,16 @@
-const CACHE_NAME = "tj-report-cache-v4";
+const CACHE_NAME = "tj-report-cache-v14";
 
 const urlsToCache = [
   "/",
   "/index.html",
+  "/manifest.json",
   "/app.js",
+  "/bootstrap.min.css",
   "/cadastro.html",
   "/config.html",
   "/offline.html",
   "/notfound.html",
+  "/tjReport192.png",
 ];
 
 self.addEventListener("install", (e) => {
@@ -18,38 +21,36 @@ self.addEventListener("install", (e) => {
   );
 });
 
-self.addEventListener("fetch", (e) => {
-  caches.match(e.request).then((response) => {
-    if (response) {
-      fetch(e.request).then((networkResponse) => {
-        if (networkResponse.ok) {
-          const cacheClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(e.request, cacheClone);
-          });
-        }
-      });
-
-      return response;
-    } else {
-      return fetch(e.request)
+// Cache First com atualização em segundo plano
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      const fetchPromise = fetch(event.request)
         .then((networkResponse) => {
+          // Atualiza o cache com a nova versão
+          const clonedResponse = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clonedResponse);
+          });
+
+          console.log("ok", networkResponse.status);
           if (networkResponse.status === 404) {
             return caches.match("/notfound.html");
           }
+
           if (networkResponse.ok) {
-            const cacheClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(e.request, cacheClone);
-            });
+            return networkResponse;
           }
-          return networkResponse;
         })
         .catch(() => {
+          // Se offline e não houver cache, não quebra
           return caches.match("/offline.html");
         });
-    }
-  });
+
+      // Retorna cache imediatamente (se existir), ou espera a rede
+      return cachedResponse || fetchPromise;
+    })
+  );
 });
 
 self.addEventListener("activate", (e) => {
