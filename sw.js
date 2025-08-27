@@ -1,11 +1,13 @@
-const CACHE_NAME = "tj-report-cache-v3";
+const CACHE_NAME = "tj-report-cache-v4";
 
 const urlsToCache = [
   "/",
   "/index.html",
   "/app.js",
-  "cadastro.html",
-  "config.html",
+  "/cadastro.html",
+  "/config.html",
+  "/offline.html",
+  "/notfound.html",
 ];
 
 self.addEventListener("install", (e) => {
@@ -33,10 +35,7 @@ self.addEventListener("fetch", (e) => {
       return fetch(e.request)
         .then((networkResponse) => {
           if (networkResponse.status === 404) {
-            return new Response("Recurso não encontrado.", {
-              status: 404,
-              statusText: "Not Found",
-            });
+            return caches.match("/notfound.html");
           }
           if (networkResponse.ok) {
             const cacheClone = networkResponse.clone();
@@ -47,13 +46,7 @@ self.addEventListener("fetch", (e) => {
           return networkResponse;
         })
         .catch(() => {
-          return new Response(
-            "Você está offline e o recurso não está em cache.",
-            {
-              status: 503,
-              statusText: "Service Unavailable",
-            }
-          );
+          return caches.match("/offline.html");
         });
     }
   });
