@@ -10,7 +10,6 @@ const urlsToCache = [
   "/config.html",
   "/offline.html",
   "/notfound.html",
-  "/tjReport192.png",
 ];
 
 self.addEventListener("install", (e) => {
