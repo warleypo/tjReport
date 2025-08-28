@@ -16,6 +16,17 @@ const meses = [
   "Novembro",
   "Dezembro",
 ];
+
+const diasSemana = [
+  "Segunda-feira",
+  "Terça-feira",
+  "Quarta-feira",
+  "Quinta-feira",
+  "Sexta-feira",
+  "Sábado",
+  "Domingo",
+];
+
 const config = {
   publicador: {
     nome: "",
@@ -298,7 +309,9 @@ function showReport(ano, mes) {
     div.classList.add("p-4");
 
     const strong = document.createElement("strong");
-    strong.innerHTML = `${reg.data.split("-").reverse().join("/")}<br>`;
+    strong.innerHTML = `<small class="text-muted">${
+      diasSemana[new Date(reg.data).getDay()]
+    }</small><br>${reg.data.split("-").reverse().join("/")}<br>`;
     div.appendChild(strong);
 
     const spanTempo = document.createElement("span");
