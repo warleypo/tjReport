@@ -27,6 +27,8 @@ const diasSemana = [
   "Domingo",
 ];
 
+const modalidadesIntegral = ["regular", "especial"];
+
 const config = {
   publicador: {
     nome: "",
@@ -153,11 +155,11 @@ function sendReport() {
         }\r\n`
       : `Horas: ${totais.horas_trabalhadas}\r\n`) +
     `Estudos: ${totais.estudos}\r\n\r\n` +
-    (["regular", "especial"].includes(config.pioneiro.tipo) &&
+    (modalidadesIntegral.includes(config.pioneiro.tipo) &&
     totais.horas_aprovadas !== "00:00"
       ? `_Atividades Aprovadas: ${totais.horas_aprovadas}_\r\n`
       : "") +
-    (["regular", "especial"].includes(config.pioneiro.tipo) &&
+    (modalidadesIntegral.includes(config.pioneiro.tipo) &&
     totais.horas_escolas !== "00:00"
       ? `_Escolas Teocráticas: ${totais.horas_escolas}_\r\n`
       : "") +
@@ -205,18 +207,24 @@ function getTotais() {
   );
 
   if (
-    !["regular", "especial"].includes(config.pioneiro.tipo) ||
+    !modalidadesIntegral.includes(config.pioneiro.tipo) ||
     totais.horas_aprovadas === "00:00"
   ) {
     document.getElementById("horas_aprovadas").parentElement.style.display =
       "none";
+  } else {
+    document.getElementById("horas_aprovadas").parentElement.style.display =
+      "inline";
   }
   if (
-    !["regular", "especial"].includes(config.pioneiro.tipo) ||
+    !modalidadesIntegral.includes(config.pioneiro.tipo) ||
     totais.horas_escolas === "00:00"
   ) {
     document.getElementById("horas_escolas").parentElement.style.display =
       "none";
+  } else {
+    document.getElementById("horas_escolas").parentElement.style.display =
+      "inline";
   }
 
   setText("horas_aprovadas", totais.horas_aprovadas);
@@ -622,7 +630,8 @@ function showReportYear() {
 
   anoServicoData.map((data) => {
     tempoAnual = data.reduce(
-      (acc, curr) => somarHoras(acc, curr.tempo),
+      (acc, curr) =>
+        curr.tipo === "pregação" ? somarHoras(acc, curr.tempo) : acc,
       tempoAnual
     );
   });
