@@ -344,6 +344,7 @@ function nextReport() {
   }
   showReport(anoAtual, mesAtual);
   getTotais();
+  showReportYear();
 }
 
 function previousReport() {
@@ -354,6 +355,7 @@ function previousReport() {
   }
   showReport(anoAtual, mesAtual);
   getTotais();
+  showReportYear();
 }
 
 showReport(anoAtual, mesAtual);
@@ -469,6 +471,7 @@ window.onload = () => {
 
   getConfigData();
   if (document.getElementById("meta_horas")) getTotais();
+  if (document.getElementById("media_anual")) showReportYear();
 
   getEditData();
 };
@@ -596,4 +599,73 @@ function removeReport() {
       }
     }
   }
+}
+
+function showReportYear() {
+  if (!["regular", "especial"].includes(config.pioneiro.tipo)) {
+    document.getElementById(
+      "media_anual"
+    ).parentElement.parentElement.style.display = "none";
+    return;
+  }
+
+  const anoServico = getAnoServico();
+  let anoServicoData = [];
+  let tempoAnual = "00:00";
+
+  anoServico.map((am) => {
+    anoServicoData.push(getReportData(am.ano, am.mes));
+  });
+
+  // remove entradas vazias
+  anoServicoData = anoServicoData.filter((as) => as.length > 0);
+
+  anoServicoData.map((data) => {
+    tempoAnual = data.reduce(
+      (acc, curr) => somarHoras(acc, curr.tempo),
+      tempoAnual
+    );
+  });
+
+  //atualiza elementos
+  document.getElementById(
+    "media_anual"
+  ).parentElement.parentElement.style.display = "flex";
+  setText("ano_base", mesAtual > 8 ? anoAtual + 1 : anoAtual);
+  setText("total_anual", tempoAnual);
+  setText("media_anual", getMediaAnual(tempoAnual));
+}
+
+function getAnoServico() {
+  const ano = anoAtual;
+  const mes = mesAtual;
+  const anoServico = [];
+  if (mes > 8) {
+    for (let i = 9; i <= 12; i++) {
+      anoServico.push({ ano, mes: i });
+    }
+    for (let j = 1; j <= 8; j++) {
+      anoServico.push({ ano: ano + 1, mes: j });
+    }
+  } else {
+    for (let j = 9; j <= 12; j++) {
+      anoServico.push({ ano: ano - 1, mes: j });
+    }
+    for (let i = 1; i <= 8; i++) {
+      anoServico.push({ ano, mes: i });
+    }
+  }
+
+  return anoServico;
+}
+
+function getMediaAnual(horas) {
+  const [horasTrabalhadas, minutosTrabalhados] = horas.split(":").map(Number);
+  const totalMinutos = horasTrabalhadas * 60 + minutosTrabalhados;
+  const mediaMensal = totalMinutos / 12;
+  const mediaHoras = Math.floor(mediaMensal / 60);
+  const mediaMinutos = Math.floor(mediaMensal % 60);
+  return `${String(mediaHoras).padStart(2, "0")}:${String(
+    mediaMinutos
+  ).padStart(2, "0")}`;
 }

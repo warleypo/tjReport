@@ -32,7 +32,6 @@ self.addEventListener("fetch", (event) => {
             cache.put(event.request, clonedResponse);
           });
 
-          console.log("ok", networkResponse.status);
           if (networkResponse.status === 404) {
             return caches.match("/notfound.html");
           }
