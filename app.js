@@ -32,6 +32,7 @@ const modalidadesIntegral = ["regular", "especial"];
 const config = {
   publicador: {
     nome: "",
+    estudantes: [],
   },
   pioneiro: {
     horas: 0,
@@ -62,6 +63,7 @@ function getConfigData() {
   const data = JSON.parse(localStorage.getItem(key));
   if (data) {
     Object.assign(config, data);
+    console.log("Config carregada:", config);
   }
 
   if (document.getElementById("publicador")) {
@@ -229,6 +231,7 @@ function getTotais() {
 
   setText("horas_aprovadas", totais.horas_aprovadas);
   setText("horas_escolas", totais.horas_escolas);
+  setText("estudos_biblicos", totais.estudos);
   setText("horas_trabalhadas", totais.horas_trabalhadas);
   setText("horas_restantes", totais.horas_restantes);
   setText("dias_atividade", totais.dias_atividade);
@@ -288,8 +291,7 @@ function calcularObjetivoDiario(horasRestantes, diasAtividade) {
 
 function showReport(ano, mes) {
   const mesReport = document.getElementById("mesReport");
-  mesReport &&
-    (mesReport.textContent = `${String(mes).padStart(2, "0")}/${ano}`);
+  mesReport && (mesReport.textContent = `${meses[mes - 1]}/${ano}`);
   const registros = getReportData(ano, mes);
 
   const lista = document.getElementById("lista");
@@ -312,9 +314,10 @@ function showReport(ano, mes) {
     li.classList.add("rounded-lg");
 
     const div = document.createElement("div");
-    div.classList.add("col-6");
-    div.classList.add("mb-4");
-    div.classList.add("p-4");
+    div.classList.add("col-7");
+    // div.classList.add("mb-4");
+    div.classList.add("px-4");
+    div.classList.add("py-2");
 
     const strong = document.createElement("strong");
     strong.innerHTML = `<small class="text-muted">${
@@ -323,22 +326,34 @@ function showReport(ano, mes) {
     div.appendChild(strong);
 
     const spanTempo = document.createElement("span");
-    spanTempo.innerHTML = `${reg.tempo}<br>`;
+    spanTempo.innerHTML = `${reg.tempo} <small class="text-primary">${
+      reg.tipo !== "pregação" ? "(" + reg.tipo + ")" : ""
+    }</small> <br>`;
     div.appendChild(spanTempo);
 
     const spanObs = document.createElement("span");
     spanObs.innerHTML = `${reg.obs.replace(/\r?\n/g, "<br>")}`;
     spanObs.classList.add("text-info");
 
-    div.appendChild(spanObs);
+    // div.appendChild(spanObs);
 
     li.appendChild(div);
 
     const divClone = div.cloneNode();
+    divClone.style.margin = "auto";
     divClone.innerHTML = `Estudos: ${String(reg.estudos).padStart(1, "0")}`;
+    divClone.classList.remove("col-7");
+    divClone.classList.add("col-5");
     divClone.classList.add("text-right");
 
+    divObs = div.cloneNode();
+    divObs.classList.remove("col-7");
+    // divObs.classList.remove("text-right");
+    divObs.classList.add("col-12");
+    divObs.appendChild(spanObs);
+
     li.appendChild(divClone);
+    li.appendChild(divObs);
 
     lista?.appendChild(li);
   });
